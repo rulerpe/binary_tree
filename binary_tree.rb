@@ -13,7 +13,7 @@ end
 
 
 class Tree
-    attr_accessor :root
+    attr_accessor :root, :j
     def initialize(arr)
         build_tree(arr)
     end
@@ -46,11 +46,11 @@ class Tree
         qeue = [curr]
         
         temp_qeue = [curr]
-        found = false
+        @found = false
         i = 0
         while temp_qeue.empty? == false
             if qeue[i].value == find
-                found = true
+                @found = true
                 break
             else
                 if qeue[i].left != nil
@@ -66,7 +66,32 @@ class Tree
             i+=1
         
         end
-        return found
+        return @found, i
+    end
+    
+    def dfs(find)
+        @j = 0
+        @found = false
+        dfs_find(find,curr = @root.dup)
+        return @found, @j
+                
+    end
+    
+    def dfs_find(find,curr)
+        if curr.left!=nil && @found!= true
+            lcurr = curr.left
+            dfs_find(find,lcurr)
+            @j += 1
+        end
+        if curr.right!=nil && @found!=true
+            rcurr = curr.right
+            dfs_find(find,rcurr)
+            @j += 1
+        end
+        if curr.value == find
+            @found = true
+        end
+        
     end
     
 end
@@ -74,6 +99,7 @@ end
 
 test_arr = [5,3,7,1,2,9,6,43,22,54,20,12]
 build = Tree.new(test_arr)
-puts build.root.right.right.value
+#puts build.root.right.right.value
 
-puts build.bfs(12)
+puts build.bfs(6)
+puts build.dfs(6)
